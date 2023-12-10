@@ -14,7 +14,7 @@ namespace Lab_4
     public class Chart
     {
         private System.Drawing.Graphics systemGraphics;
-        private int ChartTopX = 290;
+        private int ChartTopX = 350;
         private int ChartTopY = 50;
         private int chartWidth = 300;
         private int chartHeight = 300;
@@ -28,26 +28,39 @@ namespace Lab_4
             this.systemGraphics = systemGraphics;
             //this.drawChartBox();
             //draw chart X
-            this.drawVerticalText("OŚ Y", ChartTopX- spaceBetweenChartDescriptoion*3, ChartTopY,true); // Change the coordinates as needed
+            this.drawVerticalText("OŚ Y", ChartTopX- spaceBetweenChartDescriptoion*3-20, ChartTopY,true); // Change the coordinates as needed
             //Draw chart y
             this.drawVerticalText("OŚ X", ChartTopX, ChartTopY+chartHeight+ spaceBetweenChartDescriptoion*3, false); // Change the coordinates as needed 
         }
 
-        public void buildHorizontalLines(float precision, float minimumX, float maximumX)
+        public void buildHorizontalLines(float minimumX, float maximumX)
         {
-            int lineNumbers = (int)Math.Ceiling((maximumX - minimumX) / precision)-1;
+            int lineNumbers = (int)Math.Ceiling((maximumX - minimumX));
+            //Line numbers must be between 4 and 9
+            if (lineNumbers < 4) lineNumbers = 4;
+            if (lineNumbers > 9) lineNumbers = 9;
+
+
             float lineGap = chartHeight / (float)lineNumbers; // Calculate gap as a float value
 
             float yPosition = ChartTopY;
-            float currentDisplayedScaleNumber = maximumX;
+            
+            float currentDisplayedScaleNumber =(float)Math.Round(maximumX,2);
+            //Calculate line precisions
+            float precision = (float)Math.Round(Math.Abs(maximumX - minimumX)/lineNumbers,2);
+
+
+
+
             StringFormat formatString = new StringFormat();
             formatString.Alignment = StringAlignment.Center;
+
             using (Font font = new Font("Arial", 12))
             { // Font creation moved outside the loop
                 for (int i = 0; i <= lineNumbers; i++)
                 {
-                    Rectangle rect = new Rectangle(ChartTopX- spaceBetweenChartDescriptoion-15, (int)yPosition-10, 30, 30);
-                    this.systemGraphics.DrawString(currentDisplayedScaleNumber.ToString(), font, Brushes.Black, rect, formatString);
+                    Rectangle rect = new Rectangle(ChartTopX- spaceBetweenChartDescriptoion-40, (int)yPosition-10, 60, 50);
+                    this.systemGraphics.DrawString(Math.Round(currentDisplayedScaleNumber,2).ToString(), font, Brushes.Black, rect, formatString);
                     //Draw line
                     Pen greyPen = new Pen(Color.Gray, 2f);
                     this.systemGraphics.DrawLine(greyPen, ChartTopX  , yPosition, ChartTopX + chartWidth, yPosition);
@@ -62,23 +75,30 @@ namespace Lab_4
         /**
          * Builds vertival lines
          */
-        public void buildVerticalLines(float precision, int minimumX, int maximumX)
+        public void buildVerticalLines( float minimumX, float maximumX)
         {
-            int lineNumbers = (int)Math.Ceiling((maximumX - minimumX) / precision);
+            int lineNumbers = (int)Math.Ceiling(maximumX - minimumX);
+            if (lineNumbers < 4) lineNumbers = 4;
+            if (lineNumbers > 9) lineNumbers = 9;
             //Line numbers must be between <4,9>
             float lineGap = chartWidth / (float)lineNumbers; // Calculate gap as a float value
             
             float xPosition = ChartTopX;
+
             float currentDisplayedScaleNumber = minimumX;
+
+            float precision = (float)Math.Round(Math.Abs(maximumX - minimumX) / lineNumbers, 2);
+
             StringFormat formatString = new StringFormat();
             formatString.Alignment = StringAlignment.Center;
+            
             using (Font font = new Font("Arial", 12))
 
             { // Font creation moved outside the loop
                 for (int i = 0; i <= lineNumbers; i++)
                 { 
                     Rectangle rect = new Rectangle((int)xPosition-15, ChartTopY + chartHeight+ spaceBetweenChartDescriptoion,30,30);
-                    this.systemGraphics.DrawString(currentDisplayedScaleNumber.ToString(), font, Brushes.Black, rect, formatString);
+                    this.systemGraphics.DrawString(Math.Round(currentDisplayedScaleNumber).ToString(), font, Brushes.Black, rect, formatString);
                     //Draw line
                     Pen greyPen = new Pen(Color.Gray, .2f);
                     this.systemGraphics.DrawLine(greyPen, (int)xPosition, ChartTopY, xPosition, ChartTopY + chartHeight);
@@ -147,8 +167,8 @@ namespace Lab_4
             {
                 Rectangle rect;
 
-                if (isVertical) //Dull height 30 width
-                    rect = new Rectangle(x, y, spaceBetweenChartDescriptoion, chartHeight); // Adjust the rectangle size and position
+                if (isVertical) //Full height 30 width
+                    rect = new Rectangle(x, y, spaceBetweenChartDescriptoion , chartHeight); // Adjust the rectangle size and position
                 else //Full width, 30 heith
                     rect = new Rectangle(x, y, chartWidth, ChartTopY);
                 systemGraphics.DrawString(text, font, Brushes.Black, rect, verticalFormat);

@@ -30,7 +30,7 @@ namespace Lab_4
         {
             System.Drawing.Graphics g = e.Graphics;
             epicChart = new Chart(g);
-            epicChart.buildVerticalLines(1f, minValue, maxValue);
+            epicChart.buildVerticalLines(minValue, maxValue);
             epicChart.drawChartTitle("y=-1x+3");
             calculate = new Calculator(minValue, maxValue);
             CalculationResult allResults = calculate.Calculate();
@@ -38,7 +38,7 @@ namespace Lab_4
             Console.WriteLine(allResults.ToString());
             Console.WriteLine(allResults.Min[1]);
             Console.WriteLine(allResults.Max[1]);
-            epicChart.buildHorizontalLines(1f, allResults.Min[1], allResults.Max[1]);
+            epicChart.buildHorizontalLines(allResults.Min[1], allResults.Max[1]);
 
             epicChart.drawPoint(allResults.Points, allResults.Min, allResults.Max[1]);
 
@@ -98,6 +98,11 @@ namespace Lab_4
             {
                 e.Handled = true; // Prevent input that doesn't match the regex pattern
             }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
