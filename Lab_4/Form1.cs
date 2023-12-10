@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -31,9 +32,15 @@ namespace Lab_4
             epicChart = new Chart(g);
             epicChart.buildVerticalLines(1f, minValue, maxValue);
             epicChart.drawChartTitle("y=-1x+3");
-            epicChart.buildHorizontalLines(1f, minValue, maxValue);
             calculate = new Calculator(minValue, maxValue);
-            epicChart.drawPoint(calculate.calculate());
+            CalculationResult allResults = calculate.Calculate();
+            //draw y
+            Console.WriteLine(allResults.ToString());
+            Console.WriteLine(allResults.Min[1]);
+            Console.WriteLine(allResults.Max[1]);
+            epicChart.buildHorizontalLines(1f, allResults.Min[1], allResults.Max[1]);
+
+            epicChart.drawPoint(allResults.Points, allResults.Min, allResults.Max[1]);
 
         }
 

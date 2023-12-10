@@ -100,7 +100,7 @@
             // 
             // SubmitButton
             // 
-            this.SubmitButton.Location = new System.Drawing.Point(16, 192);
+            this.SubmitButton.Location = new System.Drawing.Point(16, 275);
             this.SubmitButton.Name = "SubmitButton";
             this.SubmitButton.Size = new System.Drawing.Size(210, 23);
             this.SubmitButton.TabIndex = 7;

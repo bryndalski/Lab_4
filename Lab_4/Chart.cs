@@ -33,7 +33,7 @@ namespace Lab_4
             this.drawVerticalText("OŚ X", ChartTopX, ChartTopY+chartHeight+ spaceBetweenChartDescriptoion*3, false); // Change the coordinates as needed 
         }
 
-        public void buildHorizontalLines(float precision, int minimumX, int maximumX)
+        public void buildHorizontalLines(float precision, float minimumX, float maximumX)
         {
             int lineNumbers = (int)Math.Ceiling((maximumX - minimumX) / precision)-1;
             float lineGap = chartHeight / (float)lineNumbers; // Calculate gap as a float value
@@ -97,20 +97,27 @@ namespace Lab_4
         }
 
 
-        public void drawPoint(List<float[]> pointsLits)
+        public void drawPoint(List<float[]> pointsLits, float[] min, float max)
         {
 
             //calcualte estimated distance between points
             float distanceX = chartWidth / (float)pointsLits.LongCount();
-            float distanceY = chartHeight / (float)pointsLits.LongCount();
-            const float pointDiameter = 5.0f;
+            float distanceY = chartHeight / ((float)pointsLits.LongCount() * (Math.Abs(min[1])+Math.Abs(max)));
+            const float pointDiameter = 3.0f;
+
+            //create virtual 0 lie
+           float virtualZeroAxel = (float)(Math.Abs(pointDiameter - (float)min[1] * (float)min[2] * (distanceY))+(float)chartHeight*(0.1));
+
+
             int count = 0;
             //float[] point = pointsLits[0];
             pointsLits.ForEach(point =>
             {
-//                PointF point1 = //new PointF(ChartTopX - point[0], ChartTopY + chartHeight -pointDiameter/2 - (float)point[1]);
- //               PointF point2 = //new PointF(point1.X + pointDiameter, point1.Y);
-                this.systemGraphics.FillEllipse(Brushes.Red, ChartTopX +count*(distanceX) -pointDiameter/2 + point[0], ChartTopY + chartHeight - pointDiameter / 2 - (float)point[1] * count * (distanceY), pointDiameter,pointDiameter);
+                float x = ChartTopX + count * (distanceX) - pointDiameter / 2 + point[0];
+                float y = ChartTopY + chartHeight - virtualZeroAxel - pointDiameter  - (float)point[1] * count * (distanceY);
+                Console.WriteLine(x);
+                if (x > (chartWidth + ChartTopX)) return;
+                this.systemGraphics.FillEllipse(Brushes.Red, x, y, pointDiameter,pointDiameter);
                 count++;
 
             });
